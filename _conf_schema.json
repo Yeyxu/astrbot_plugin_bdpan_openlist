@@ -1,0 +1,136 @@
+{
+  "enable_auto_detect": {
+    "description": "自动识别百度网盘链接",
+    "hint": "无需指令即可触发；关闭后仍可使用 /bdpan。AstrBot 平台本身也须允许接收对应会话的消息。",
+    "type": "bool",
+    "default": true
+  },
+  "enable_private": {
+    "description": "允许私聊触发",
+    "hint": "同时控制自动识别和手动指令。",
+    "type": "bool",
+    "default": true
+  },
+  "enable_group": {
+    "description": "允许群聊触发",
+    "hint": "同时控制自动识别和手动指令；能够触发的成员会使用所配置的同一个百度网盘账户转存。",
+    "type": "bool",
+    "default": true
+  },
+  "baidu_cookie": {
+    "description": "百度网盘 Cookie",
+    "hint": "粘贴登录 pan.baidu.com 后请求头中完整的 Cookie 值，至少包含非空 BDUSS 和 STOKEN；不要包含 Cookie: 前缀。",
+    "type": "string",
+    "secret": true,
+    "default": ""
+  },
+  "baidu_save_path": {
+    "description": "百度网盘保存根目录",
+    "hint": "使用以 / 开头的百度网盘绝对路径。不存在时逐级创建；每次任务会在其中创建独立子目录。",
+    "type": "string",
+    "default": "/AstrBot转存"
+  },
+  "openlist_url": {
+    "description": "OpenList 访问地址",
+    "hint": "填写机器人可访问、用户也能打开的完整 http(s) 地址；支持反向代理的子路径。Docker 中 127.0.0.1 指向 AstrBot 容器自身。",
+    "type": "string",
+    "default": "http://127.0.0.1:5244"
+  },
+  "openlist_username": {
+    "description": "OpenList 用户名",
+    "hint": "账户需要目录读取、刷新及创建分享权限。配置静态 Token 时不使用此字段。",
+    "type": "string",
+    "default": "admin"
+  },
+  "openlist_password": {
+    "description": "OpenList 登录密码",
+    "hint": "填写原始密码；仅发送至 /api/auth/login，不做预哈希。配置静态 Token 时不使用此字段。",
+    "type": "string",
+    "secret": true,
+    "default": ""
+  },
+  "openlist_token": {
+    "description": "OpenList 静态 Token（可选）",
+    "hint": "可填写后台静态管理员 Token，优先于用户名密码；填写原始 Token，不带 Bearer 前缀。留空则登录并缓存 Token。",
+    "type": "string",
+    "secret": true,
+    "default": ""
+  },
+  "openlist_otp_key": {
+    "description": "OpenList 两步验证密钥（可选）",
+    "hint": "填写绑定验证器时的 Base32 TOTP 密钥，不是六位动态验证码；插件按 30 秒周期生成 otp_code。服务器时间应准确。",
+    "type": "string",
+    "secret": true,
+    "default": ""
+  },
+  "openlist_save_path": {
+    "description": "OpenList 对应保存根目录",
+    "hint": "必须准确对应 baidu_save_path，例如百度挂载到 /baidu 且挂载根为 / 时填写 /baidu/AstrBot转存。",
+    "type": "string",
+    "default": "/baidu/AstrBot转存"
+  },
+  "openlist_directory_password": {
+    "description": "OpenList 目录访问密码（可选）",
+    "hint": "用于 /api/fs/list 与 /api/fs/get 的 password 字段，与新建分享的密码不同。",
+    "type": "string",
+    "secret": true,
+    "default": ""
+  },
+  "openlist_share_pwd": {
+    "description": "新建分享的提取码",
+    "hint": "留空为无密码；仅保护成功创建的 OpenList 分享，不适用于降级直链或原目录入口。",
+    "type": "string",
+    "secret": true,
+    "default": ""
+  },
+  "share_max_accessed": {
+    "description": "分享最大访问次数",
+    "hint": "0 表示不限制。由 OpenList 服务端统计；paths 格式接口未定义该字段，设置正数时应使用 files 格式。",
+    "type": "int",
+    "default": 0
+  },
+  "openlist_share_prefix": {
+    "description": "分享链接路径前缀",
+    "hint": "默认为 /s/；只有前端或反向代理确实支持时才改为 /sd/ 等前缀。",
+    "type": "string",
+    "default": "/s/"
+  },
+  "openlist_share_api_format": {
+    "description": "创建分享接口格式",
+    "hint": "当前 OpenList 源码使用 files/pwd/max_accessed；部分文档示例使用 paths/password。按服务端版本选择，插件不会盲目重试创建。",
+    "type": "string",
+    "options": ["files", "paths"],
+    "default": "files"
+  },
+  "output_mode": {
+    "description": "返回链接类型",
+    "hint": "share：创建分享，失败时自动降级；direct：直接返回文件 raw_url，目录返回前端入口。直链可能有有效期。",
+    "type": "string",
+    "options": ["share", "direct"],
+    "default": "share"
+  },
+  "max_links_per_message": {
+    "description": "每条消息最多处理的链接数",
+    "hint": "范围 1 至 10；相同分享在同一消息内去重，超出时会明确提示。",
+    "type": "int",
+    "default": 3
+  },
+  "max_files_per_share": {
+    "description": "每个分享最多转存的顶层条目数",
+    "hint": "范围 1 至 10000；超过即停止，不会只转存前一页。网盘本身对文件夹内总文件数还有独立限制。",
+    "type": "int",
+    "default": 1000
+  },
+  "http_timeout": {
+    "description": "单次 HTTP 请求超时秒数",
+    "hint": "范围 5 至 120；写入请求超时不会自动重发，以免重复转存或创建分享。",
+    "type": "int",
+    "default": 30
+  },
+  "task_timeout": {
+    "description": "百度异步转存任务等待秒数",
+    "hint": "范围 10 至 600；超时后任务可能仍在百度后台执行，先检查本次目录再决定是否重试。",
+    "type": "int",
+    "default": 120
+  }
+}

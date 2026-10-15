@@ -1,0 +1,8 @@
+name: astrbot_plugin_bdpan_openlist
+display_name: 百度网盘转存 OpenList 分享
+desc: 自动识别百度网盘分享链接，使用 Cookie 转存至指定目录并通过 OpenList 生成分享链接发给用户
+short_desc: 百度网盘自动转存并通过 OpenList 分享
+version: v1.0.0
+author: Yeyxu
+repo: https://github.com/Yeyxu/astrbot_plugin_bdpan_openlist
+astrbot_version: ">=4.16,<5"
