@@ -1,0 +1,2 @@
+# astrbot_plugin_bdpan_openlist
+astrbot自动识别百度网盘分享链接，使用 Cookie 转存至指定目录并通过 OpenList 生成分享链接发给用户
